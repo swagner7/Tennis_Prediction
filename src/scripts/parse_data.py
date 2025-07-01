@@ -7,20 +7,18 @@ def clean_data(csv_path):
     df = df[df['Comment'] == 'Completed'] # Filter for completed matches
     return df
 
-def restructure_data(csv_path):
+def restructure_data(df):
     """
-    Load tennis match data and restructure it to have 'player_1', 'player_2', and 'winner' columns,
-    while preserving match metadata columns.
+    Restructure a cleaned DataFrame to have 'player_1', 'player_2', and 'winner' columns,
+    while preserving match metadata.
 
     Parameters:
-        csv_path (str): Path to the input CSV file with 'winner' and 'loser' columns.
+        df (pd.DataFrame): Cleaned match data with 'winner' and 'loser' columns.
 
     Returns:
         pd.DataFrame: Restructured match data with metadata.
     """
-    df = pd.read_csv(csv_path)
-
-    metadata_cols = ['Location', 'Tournament', 'Date', 'Series', 'Surface', 'Court', 'Best of', 'Comment']
+    metadata_cols = ['Location', 'Tournament', 'Date', 'Series', 'Court', 'Best of', 'Surface', 'Round']
 
     def randomize_players(row):
         if np.random.rand() > 0.5:
@@ -38,6 +36,4 @@ def restructure_data(csv_path):
                 **{col: row[col] for col in metadata_cols if col in row}
             })
 
-    restructured_df = df.apply(randomize_players, axis=1)
-    restructured_df.to_csv("src/data/restructured_df.csv", index=False)
-    return restructured_df
+    return df.apply(randomize_players, axis=1)

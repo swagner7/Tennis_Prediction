@@ -2,16 +2,31 @@
 
 version: '3'
 
-vars:
-  GREETING: Hello, World!
-
 tasks:
-  default:
+  run-main:
+    desc: "🏃 Run the full data pipeline (consolidate → clean → restructure → feature enrich)"
+    dir: src
     cmds:
-      - echo "{{.GREETING}}"
-    silent: true
+      - python3 main.py
+    silent: false
 
-  consolidate-data:
+  feature-summary:
+    desc: "📊 Run feature summary analysis and plots"
+    dir: src/scripts
     cmds:
-      - python src/scripts/consolidate_data.py
-    desc: Run the consolidate data script
+      - python3 feature_summary.py
+    silent: false
+
+  prep-data-for-ml:
+    desc: "🧪 Prepare final dataset for ML modeling (X, y)"
+    dir: src/scripts
+    cmds:
+      - python3 prep_data_for_ml.py
+    silent: false
+
+  train-eval-ml:
+    desc: "🧠 Train and evaluate ML classifiers on match data"
+    dir: src/scripts
+    cmds:
+      - python3 train_and_evaluate.py
+    silent: false
