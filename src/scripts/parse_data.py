@@ -4,6 +4,7 @@ import numpy as np
 def clean_data(csv_path):
     df = pd.read_csv(csv_path)
     df = df.dropna(subset=['Winner', 'Loser'])  # Ensure both columns exist
+    df = df[df['Comment'] == 'Completed'] # Filter for completed matches
     return df
 
 def restructure_data(csv_path):
@@ -19,7 +20,7 @@ def restructure_data(csv_path):
     """
     df = pd.read_csv(csv_path)
 
-    metadata_cols = ['Location', 'Tournament', 'Date', 'Series', 'Court', 'Best of']
+    metadata_cols = ['Location', 'Tournament', 'Date', 'Series', 'Surface', 'Court', 'Best of', 'Comment']
 
     def randomize_players(row):
         if np.random.rand() > 0.5:
@@ -38,5 +39,5 @@ def restructure_data(csv_path):
             })
 
     restructured_df = df.apply(randomize_players, axis=1)
-    restructured_df.to_csv("restructured_df.csv", index=False)
+    restructured_df.to_csv("src/data/restructured_df.csv", index=False)
     return restructured_df
